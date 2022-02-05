@@ -9,7 +9,9 @@
     :moeda "R$" :data "03/12/2016"}])
 
 (def trasacao-aleatoria {:valor 9.0M})
-(def cotacoes {:yuan {:cotacao 2.15M :simbolo "¥"}})
+(def cotacoes
+  {:yuan {:cotacao 2.15M :simbolo "¥"}
+   :euro {:cotacao 0.28M :simbolo "€"}})
 
 (defn valor-sinalizado [transacao]
   (let [moeda (:moeda transacao "R$")
@@ -21,12 +23,16 @@
 (defn data-valor [trasacao]
   (str (:data trasacao) " => " (valor-sinalizado trasacao)))
 
-(defn trasacao-em-yuan [trasacao]
-  (let [{{cotacao :cotacao simbolo :simbolo} :yuan} cotacoes]
+(defn trasacao-em-outra-moeda [moeda trasacao]
+  (let [{{cotacao :cotacao simbolo :simbolo} moeda} cotacoes]
     (assoc trasacao :valor (* cotacao (:valor trasacao))
                     :moeda simbolo)))
 
-(def texto-resumo-em-yuan (comp data-valor trasacao-em-yuan))
+(def transacao-em-euro (partial trasacao-em-outra-moeda :euro))
+
+(def transacao-em-yuan (partial trasacao-em-outra-moeda :yuan))
+
+(def texto-resumo-em-yuan (comp data-valor trasacao-em-outra-moeda))
 
 (println (valor-sinalizado (first transacoes)))
 (println (valor-sinalizado (second transacoes)))
@@ -37,7 +43,10 @@
 (println (data-valor trasacao-aleatoria))
 (println "_______")
 (println (data-valor (first transacoes)))
-(println (data-valor (trasacao-em-yuan (first transacoes))))
+(println (data-valor (trasacao-em-outra-moeda :yuan (first transacoes))))
 (println "_______")
-(println (map texto-resumo-em-yuan transacoes))
-(println (trasacao-em-yuan (first transacoes)))
+(println (trasacao-em-outra-moeda :euro (first transacoes)))
+(println (trasacao-em-outra-moeda :yuan (first transacoes)))
+(println "_______")
+(println (transacao-em-euro (first transacoes)))
+(println (transacao-em-yuan (first transacoes)))
