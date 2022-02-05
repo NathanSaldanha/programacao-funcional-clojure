@@ -22,10 +22,9 @@
   (str (:data trasacao) " => " (valor-sinalizado trasacao)))
 
 (defn trasacao-em-yuan [trasacao]
-  (let [yuan (:yuan cotacoes)]
-    (assoc trasacao :valor (* (:cotacao yuan)
-                              (:valor trasacao))
-                    :moeda (:simbolo yuan))))
+  (let [{{cotacao :cotacao simbolo :simbolo} :yuan} cotacoes]
+    (assoc trasacao :valor (* cotacao (:valor trasacao))
+                    :moeda simbolo)))
 
 (def texto-resumo-em-yuan (comp data-valor trasacao-em-yuan))
 
@@ -41,3 +40,4 @@
 (println (data-valor (trasacao-em-yuan (first transacoes))))
 (println "_______")
 (println (map texto-resumo-em-yuan transacoes))
+(println (trasacao-em-yuan (first transacoes)))
