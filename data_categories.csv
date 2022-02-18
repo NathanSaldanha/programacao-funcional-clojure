@@ -1,4 +1,7 @@
 privacy_key,parent_key,name,description
+data_category,Data Category	
+personal-information,data_category,personal information,personal information
+personal-information.details,personal-information,personal information details,personal information details
 personal-information.detail/age,personal-information.detail,age,Person's age
 personal-information.detail/gender,personal-information.detail,gender,Person's gender
 personal-information.detail/nationality,personal-information.detail,nationality,Person's nationality
